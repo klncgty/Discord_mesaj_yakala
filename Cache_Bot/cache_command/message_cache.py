@@ -72,6 +72,8 @@ class CSV_Channel(commands.Cog):
         '''
         for channel in channels:
             if channel.type == disnake.ChannelType.text:
+                category_name = channel.category
+                os.makedirs(f'{self.bot.config["output_url"]}/{category_name}', exist_ok=True)
                 columns = ['username', 'disc', 'message_content', 'mentions','time_stamp']
                 df = pd.DataFrame(columns = columns)
                 messages = await channel.history(limit=None).flatten()
@@ -89,7 +91,7 @@ class CSV_Channel(commands.Cog):
                         #temp_df = {'username': user, 'disc': dics, 'message_content': content, 'time_stamp': time_stamp.strftime("%m/%d/%Y, %H:%M:%S")}
                     df = pd.concat([df, temp_df], ignore_index = True)
                 
-                df.to_csv(f'{self.bot.config["output_url"]}/{channel.name}.csv', sep = '~')
+                df.to_csv(f'{self.bot.config["output_url"]}/{category_name}/{channel.name}.csv', sep = '~')
                 print(f'Bitti!! {channel.name}')
             else:
                 pass
